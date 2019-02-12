@@ -13,7 +13,7 @@ npm start
 ### Build
 
 ```shell
-npm run buid
+npm run build
 ```
 
 
