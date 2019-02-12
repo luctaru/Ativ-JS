@@ -1,7 +1,10 @@
+// eslint-disable-next-line no-undef
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+// eslint-disable-next-line no-undef
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
+// eslint-disable-next-line no-undef
 module.exports = {
   module: {
     rules: [
@@ -24,6 +27,17 @@ module.exports = {
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"]
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
       }
     ]
   },
