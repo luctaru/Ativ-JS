@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
+
 <body>
-  <h1>Hello !!</h1>
+  <header>
+    <h1><a href="index.html">AGENDAKI</a></h1>
+  </header>
+  <div class="div">
+    <nav id="org">
+      <h2>Contatos:</h2>
+      <ul>
+        <li class="list" id="all-list"><a href="index.html">Todos</a></li>
+        <li class="list" id="fav-list"><a href="fav.html">Favoritos <img src="_img/star-fav-icon.png" /></a>
+        </li>
+        <li class="list" id="add-list"><a href="fav.html">Adicionar <img src="_img/add-icon.png" /></a>
+        </li>
+        <li class="list" id="rm-list">Deletar <img src="_img/x-icon.png" /></a></li>
+
+      </ul>
+    </nav>
+
+    <form class="search">
+      <input type="text" name="nSearch" id="iSearch" size="50" maxlength="50"
+        placeholder="Digite o nome do contato..." />
+      <button class="ani-button" type="submit">
+        <span><i>Procurar</i></span>
+      </button>
+    </form>
+    <section id="prin-section">
+
+    </section>
+  </div>
+  <footer class="rodape">
+    <p>Copyright &copy; 2019 - by Anonymous<br />
+      <a href="" target="_blank">Facebook</a> | <a href="" target="_blank">Twitter</a>
+    </p>
+  </footer>
 </body>
+
 </html>

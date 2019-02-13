@@ -1,0 +1,37 @@
+p input, select, textarea{
+    color:black;
+}
+
+.div-top{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    margin-bottom: 0%;
+    text-align: center;
+    align-content: center;
+    max-width: 60%;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 2px 2px 2px black;
+}
+
+.div-mid{
+    margin:auto;
+    line-height: 5px;
+}
+
+.div-foot{
+    background-color: whitesmoke;
+    text-align: justify;
+    padding: 1%;
+    margin: 2% auto;
+    max-width: 60%;
+}
+
+#div-end{
+    background-color: #e4959e;
+}
+
+#iComment{
+    margin-top: 2%;
+}
