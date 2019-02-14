@@ -1,12 +1,19 @@
 export class Api {
   cont() {
-    let res = fetch("http://contacts-api.azurewebsites.net/api/contacts/", {
+    let res = fetch("http://contacts-api.azurewebsites.net/api/contacts?limit=25", {
       method: "get"
     });
     return res;
   }
 
-  contAdd(){
+  contSearch(id){
+    let res = fetch("http://contacts-api.azurewebsites.net//api/contacts/"+ id, {
+        method: "get"
+      });
+      return res;
+  }
+
+  contAdd(id, c){
     // let res = fetch("http://contacts-api.azurewebsites.net/api/contacts/", {
     //   method: "get"
     // })

@@ -24,7 +24,7 @@ header{
 }
 
 section{
-    border: 1px solid black;
+
 }
 
 header h1{
@@ -199,8 +199,14 @@ td a:hover{
     background-color: rgba(209, 17, 73, .9);
 }
 
-.hiddenRow{
-    display: none;
+#final-row{
+    text-align: center;
+    font-weight: bold;
+    background-color: rgba(209, 17, 73, .9);
+    color: whitesmoke;
+    padding: 1%;
+    max-width: 50%;
+    margin: 2% auto;
 }
 
 .col0{
@@ -217,19 +223,9 @@ td a:hover{
 
 .col4{
     width: 4%;
+
 }
 
-.star-img{
-    cursor: pointer;
-}
-
-.star-check{
-    display: none;
-}
-
-.star-check:checked~label{
-    background-color: yellow;
-}
 
 #bMore{
     display: block;
