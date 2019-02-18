@@ -1,23 +1,13 @@
 import { Api } from "./api.js";
-import star from "../_img/star.png";
 
 const api = new Api();
 
-export const renderSearch = () => {
+export const renderSearch = async (name, arr) => {
 
-  api.cont()
-    .then(function(response) {
-      response.json().then(function(result) {
-        const array = result.map(element => element);
-        api.contSearch()
 
-      });
-    })
-    .catch(function(err) {
-      console.error(err);
-    });
-};
+    await api.contSearch();
 
+}
 {/* <div class="div-top">
                 <div class="div-mid">
                     <p><img id="cont-img" src="_img/cont-logo.png"></p>

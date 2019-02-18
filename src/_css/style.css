@@ -227,7 +227,7 @@ td a:hover{
 }
 
 
-#bMore{
+.btn{
     display: block;
     margin: 30px auto;
     padding: 5px;
@@ -245,7 +245,7 @@ td a:hover{
     cursor: pointer;
 }
 
-#bMore:hover{
+.btn:hover{
     background-color: #ffbaba   ;
 }
 

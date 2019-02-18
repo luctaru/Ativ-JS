@@ -1,11 +1,15 @@
 import { Api } from "./api.js";
+import { renderSearch } from "./contact-search.js";
+
 const api = new Api();
 
-export const renderList = () => {
+export const renderList = async () => {
+    await api.cont();
 
-    function markupTr(z, ary){
+    function markupTr(z, ary) {
         const m = `
         <tr class="userRow">
+            <td class="col1" style="display:none">${ary[z].id}</td>
             <td class="col0"><input class="check" type="checkbox" />
             </td>
             <td class="col4">
@@ -21,86 +25,149 @@ export const renderList = () => {
         return m;
     }
 
-    function favBtn(){
-        document.getElementById("fav-list").onclick = function(){
-            for (i = 1; i <= 10; i++) {
-                table.innerHTML += markupTr(i, arr);
-            }
-            let y = i;
-            document.getElementById("bMore").onclick = function() {
-                while(y < y + 10) {
-                    console.log(y)
-                    if (typeof arr[y] === "undefined") {
-                        document.getElementById("bMore").style.display = "none";
-                        section.innerHTML += `<p id = "final-row">ACABOU OS SEUS CONTATOS</p>`;
-                        break;
-                    }
-
-                    else if(y % 10 == 0){
-                        table.innerHTML += markupTr(y, arr);
-                        y++;
-                        break;
-                    }
-
-                    else{
-                        table.innerHTML += markupTr(y, arr);
-                    }
-                    y++;
-                }
-            };
-        }
+    function markupTable() {
+        const m = `
+        <table id="prin-table">
+            <tr id="fRow">
+            <td class="col0"><input class="check" type="checkbox" />
+            <td colspan="2">Nome</td>
+            <td class="col2">Sobrenome</td>
+            <td class="col3">E-mail</td>
+            </tr>
+        </table>`;
+        return m;
     }
 
-    api.cont()
-        .then(function(response) {
-            response.json().then(function(result) {
-                const array = result.map(element => element);
-                const arr = [0, ...array];
-                const section = document.getElementById("prin-section");
-                const markupTable = `
-                    <table id="prin-table">
-                        <tr id="fRow">
-                        <td class="col0"><input class="check" type="checkbox" />
-                        <td colspan="2">Nome</td>
-                        <td class="col2">Sobrenome</td>
-                        <td class="col3">E-mail</td>
-                        </tr>
-                    </table>`;
-                const markupBtn = `
-                    <input id="bMore" type="button" value="Mais..."/>`;
-                section.innerHTML = markupTable;
-                section.innerHTML += markupBtn;
+    function markupBtn() {
+        const m = `
+        <input id="bMore" class="btn" type="button" value="Mais..."/>`;
+        return m;
+    }
 
-                const table = document.getElementById("prin-table");
-                let i;
-                for (i = 1; i <= 10; i++) {
-                    table.innerHTML += markupTr(i, arr);
+    function markupFav() {
+        const m = `
+        <table id="fav-table">
+            <tr id="fRow">
+            <td class="col0"><input class="check" type="checkbox" />
+            <td colspan="2">Nome</td>
+            <td class="col2">Sobrenome</td>
+            <td class="col3">E-mail</td>
+            </tr>
+        </table>`;
+        return m;
+    }
+
+    function renderPrin() {
+        const arr = [...window.state.contacts];
+        const section = document.getElementById("prin-section");
+        section.innerHTML = markupTable();
+        section.innerHTML += markupBtn();
+
+        for (let c = 0; c < arr.length; c++) {
+
+            let aux = document.getElementById("prin-table");
+            aux.innerHTML += markupTr(c, arr);
+        }
+
+
+        let star = [...document.getElementsByClassName("star")];
+        for (let c = 0; c < arr.length; c++) {
+            if (arr[c].isFavorite) {
+                star[c].setAttribute("checked", "yes");
+            }
+        }
+        let tr = [...document.getElementsByClassName("userRow")];
+
+        for (let c = 10; c < arr.length; c++) {
+            tr[c].style.display = "none";
+        }
+
+        let user = [...document.getElementsByClassName("col1")];
+
+        // for(let c = 0; c < arr.length; c++){
+        //     user[c].addEventListener('click', () => {
+        //         const section = document.getElementById("prin-section");
+        //         section.innerHTML = ``;
+        //         renderSearch(user[c].innerHTML, arr);
+        //     })
+        // }
+
+        let btnCont = 10;
+        let btnContAux = btnCont + 10;
+
+        document.getElementById("bMore").onclick = function() {
+            for (let c = btnCont; c < btnContAux; c++) {
+                if (typeof tr[c] === "undefined") {
+                    section.innerHTML += `<p id = "final-row">ACABOU SEUS CONTATOS</p>`;
+                    document.getElementById("bMore").style.display = "none";
+                    break;
+                } else {
+                    tr[c].style.display = "table-row";
                 }
-                let y = i;
-                document.getElementById("bMore").onclick = function() {
-                    while(y < y + 10) {
-                        console.log(y)
-                        if (typeof arr[y] === "undefined") {
-                            document.getElementById("bMore").style.display = "none";
-                            section.innerHTML += `<p id = "final-row">ACABOU OS SEUS CONTATOS</p>`;
-                            break;
-                        }
+            }
+            btnCont = btnCont + 10;
+            btnContAux = btnCont + 10;
+        };
+    }
 
-                        else if(y % 10 == 0){
-                            table.innerHTML += markupTr(y, arr);
-                            y++;
-                            break;
-                        }
+    renderPrin();
 
-                        else{
-                            table.innerHTML += markupTr(y, arr);
-                        }
-                        y++;
-                    }
-                };
-            });
-        })
-        .catch(function(err) {
-            console.error(err);
-        });
-};
+    function renderFav(){
+        const arr = [...window.state.contacts];
+        const section = document.getElementById("prin-section");
+        section.innerHTML = markupTable();
+        section.innerHTML += markupBtn();
+
+        for (let c = 0; c < arr.length; c++) {
+            let aux = document.getElementById("prin-table");
+            if(arr[c].isFavorite){
+                aux.innerHTML += markupTr(c, arr);
+            }
+        }
+
+        let star = [...document.getElementsByClassName("star")];
+        for(let c = 0; c < arr.length; c++){
+            if(typeof star[c] !== "undefined"){
+                star[c].setAttribute("checked", "yes");
+            }
+        }
+
+        let tr = [...document.getElementsByClassName("userRow")];
+
+        for (let c = 10; c < arr.length; c++) {
+            if(typeof star[c] !== "undefined"){
+                tr[c].style.display = "none";
+            }
+        }
+
+        let btnCont = 10;
+        let btnContAux = btnCont + 10;
+
+        document.getElementById("bMore").onclick = function() {
+            for (let c = btnCont; c < btnContAux; c++) {
+                if (typeof tr[c] === "undefined") {
+                    section.innerHTML += `<p id = "final-row">ACABOU SEUS CONTATOS</p>`;
+                    document.getElementById("bMore").style.display = "none";
+                    break;
+                } else {
+                    tr[c].style.display = "table-row";
+                }
+            }
+            btnCont = btnCont + 10;
+            btnContAux = btnCont + 10;
+        };
+    }
+
+    document.getElementById("all-list").addEventListener('click', () => {
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        renderPrin();
+    })
+
+    document.getElementById("fav-list").addEventListener('click', () => {
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        renderFav();
+    })
+
+   }
