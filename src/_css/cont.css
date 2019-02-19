@@ -17,7 +17,6 @@ p input, select, textarea{
 
 .div-mid{
     margin:auto;
-    line-height: 5px;
 }
 
 .div-foot{
@@ -35,3 +34,9 @@ p input, select, textarea{
 #iComment{
     margin-top: 2%;
 }
+
+@media only screen and (max-width: 600px) {
+    .div-top{
+        max-width: 70%;
+    }
+  }

@@ -24,7 +24,6 @@ header{
 }
 
 section{
-
 }
 
 header h1{
@@ -182,19 +181,6 @@ table td{
     background-color: #efdae6;
 }
 
-td a{
-    width: 100%;
-
-  display: block;
-  text-decoration: none;
-  color: black;
-  transition: 0.5s;
-}
-
-td a:hover{
-    background-color: rgba(228, 149, 158, 0.8);
-}
-
 #fRow td{
     background-color: rgba(209, 17, 73, .9);
 }
@@ -209,23 +195,31 @@ td a:hover{
     margin: 2% auto;
 }
 
-.col0{
+.col1{
     width: 4%;
 }
 
 .col2{
-    width: 35%;
-}
-
-.col3{
-    width: 30%;
-}
-
-.col4{
     width: 4%;
 
 }
 
+.col3{
+    transition: 0.5s;
+}
+
+.col3:hover{
+    cursor: pointer;
+    background-color: rgba(228, 149, 158, 0.8);
+}
+
+.col4{
+    width: 35%;
+}
+
+.col5{
+    width: 30%;
+}
 
 .btn{
     display: block;
@@ -273,8 +267,8 @@ td a:hover{
         }
     }
 
-    @media only screen and (max-width: 800px) {
-        .col2{
+    @media only screen and (max-width: 790px) {
+        .col5{
             display: none;
         }
         table td{
@@ -291,7 +285,7 @@ td a:hover{
       }
 
   @media only screen and (max-width: 600px) {
-    .col2, .col3{
+    .col4, .col5{
         display: none;
     }
     table td{

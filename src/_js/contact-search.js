@@ -2,37 +2,55 @@ import { Api } from "./api.js";
 
 const api = new Api();
 
-export const renderSearch = async (name, arr) => {
+export const renderSearch = async (id, arr) => {
 
+    await api.contSearch(id);
 
-    await api.contSearch();
+    document.getElementById("searchForm").style.display = "none";
+    document.getElementById("edit-list").style.display = "initial";
+
+    const cont = window.state.filter;
+
+    const section = document.getElementById("prin-section");
+
+    let aux;
+
+    if(cont.gender == 'f'){
+        aux = 'Female';
+    }
+    else{
+        aux = 'Male';
+    }
+
+    function markup(){
+        const m = `<div class="div-top">
+        <div class="div-mid">
+            <p><img src="${cont.info.avatar}"></p>
+        </div>
+        <div class="div-mid">
+            <p>${cont.firstName} ${cont.lastName}</p>
+            <p>${aux}</p>
+            <p>${cont.email}</p>
+        </div>
+    </div>
+
+    <div class="div-top" id="div-end">
+        <div class="div-mid">
+            <p>${cont.info.company}</p>
+            <p>${cont.info.address}</p>
+            <p>${cont.info.phone}</p>
+        </div>
+    </div>
+
+    <div class="div-foot">
+        <p>Comentário:</p>
+        <p>${cont.info.comments}
+        </p>
+    </div>`;
+    return m;
+    }
+
+    section.insertAdjacentHTML('beforeend', markup());
 
 }
-{/* <div class="div-top">
-                <div class="div-mid">
-                    <p><img id="cont-img" src="_img/cont-logo.png"></p>
-                </div>
-                <div class="div-mid">
-                    <p>Pessoa1 Sobrenome1</p>
-                    <p>Masculino</p>
-                    <p><img src="_img/calendar-icon.png" /> 03/06/1996 </p>
-                    <p><img src="_img/mail-icon.png" /> pessoa@forlogic.net</p>
-                </div>
-            </div>
-
-            <div class="div-top" id="div-end">
-                <div class="div-mid">
-                    <p><img src="_img/building-icon.png" /> Company A</p>
-                    <p><img src="_img/local-icon.png" /> Rua dos Bobos n° 0</p>
-                    <p>Cornélio Procópio - PR</p>
-                    <p><img src="_img/phone-icon.png" /> (xx)xxxx-xxxx</p>
-                </div>
-            </div>
-
-            <div class="div-foot">
-                <p>Comentário:</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.
-                </p>
-            </div> */}
+{/*  */}

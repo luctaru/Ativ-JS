@@ -11,7 +11,7 @@ export class Api {
     }
 
   async contSearch(id){
-    const res = fetch("http://contacts-api.azurewebsites.net//api/contacts/"+ id);
+    const res = await fetch("http://contacts-api.azurewebsites.net//api/contacts/"+ id);
     const data = await res.json();
     window.state = {
         ...window.state,

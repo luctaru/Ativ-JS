@@ -9,17 +9,17 @@ export const renderList = async () => {
     function markupTr(z, ary) {
         const m = `
         <tr class="userRow">
-            <td class="col1" style="display:none">${ary[z].id}</td>
-            <td class="col0"><input class="check" type="checkbox" />
+            <td class="col0" style="display:none">${ary[z].id}</td>
+            <td class="col1"><input class="check" type="checkbox" />
             </td>
-            <td class="col4">
+            <td class="col2">
                 <input class="star" type="checkbox"/>
             </td>
-            <td>${ary[z].firstName}
+            <td class="col3">${ary[z].firstName}
             </td>
-            <td class="col2">${ary[z].lastName}
+            <td class="col4">${ary[z].lastName}
             </td>
-            <td class="col3">${ary[z].email}
+            <td class="col5">${ary[z].email}
             </td>
         </tr>`;
         return m;
@@ -29,10 +29,10 @@ export const renderList = async () => {
         const m = `
         <table id="prin-table">
             <tr id="fRow">
-            <td class="col0"><input class="check" type="checkbox" />
+            <td class="col1"><input class="check" type="checkbox" />
             <td colspan="2">Nome</td>
-            <td class="col2">Sobrenome</td>
-            <td class="col3">E-mail</td>
+            <td class="col4">Sobrenome</td>
+            <td class="col5">E-mail</td>
             </tr>
         </table>`;
         return m;
@@ -44,100 +44,97 @@ export const renderList = async () => {
         return m;
     }
 
-    function markupFav() {
+    function markupFav(ary) {
         const m = `
-        <table id="fav-table">
-            <tr id="fRow">
-            <td class="col0"><input class="check" type="checkbox" />
-            <td colspan="2">Nome</td>
-            <td class="col2">Sobrenome</td>
-            <td class="col3">E-mail</td>
-            </tr>
-        </table>`;
+
+        <tr class="userRow">
+            <td class="col0" style="display:none">${ary.id}</td>
+            <td class="col1"><input class="check" type="checkbox" />
+            </td>
+            <td class="col2">
+                <input class="star" type="checkbox"/>
+            </td>
+            <td class="col3">${ary.firstName}
+            </td>
+            <td class="col4">${ary.lastName}
+            </td>
+            <td class="col5">${ary.email}
+            </td>
+        </tr>`;
         return m;
     }
 
-    function renderPrin() {
-        const arr = [...window.state.contacts];
+    function search() {
+        // const { contacts, filter, loading } = window.state;
+        // const contactsMatch = contacts.filter(c =>
+        //     new RegExp(filter).test(c.firstName)
+        // );
+
+        //     const tb = document.getElementById("prin-table")
+
+        // for (const contact of contactsMatch) {
+        //     tb.insertAdjacentHTML('beforeend', markupFav(contact)) ;
+        // }
+
+        document.getElementById("iSearch").onkeyup = ({
+            target: { value }
+        }) => {
+            window.state = {
+                ...window.state,
+                filter: value
+            };
+            console.log(window.state.filter)
+        };
+    }
+
+
+
+    const arry = [...window.state.contacts];
+
+    function renderPrin(arr) {
+        document.getElementById("edit-list").style.display = "none";
+        document.getElementById("searchForm").style.display = "initial";
+
+
         const section = document.getElementById("prin-section");
-        section.innerHTML = markupTable();
-        section.innerHTML += markupBtn();
+        section.insertAdjacentHTML("beforeend", markupTable());
+        section.insertAdjacentHTML("beforeend", markupBtn());
 
         for (let c = 0; c < arr.length; c++) {
-
             let aux = document.getElementById("prin-table");
-            aux.innerHTML += markupTr(c, arr);
+            aux.insertAdjacentHTML("beforeend", markupTr(c, arr));
         }
-
 
         let star = [...document.getElementsByClassName("star")];
         for (let c = 0; c < arr.length; c++) {
             if (arr[c].isFavorite) {
                 star[c].setAttribute("checked", "yes");
             }
+            star[c].onchange = function() {
+                if (!star[c].checked) {
+                    arr[c].isFavorite = false;
+
+                } else {
+                    arr[c].isFavorite = true;
+                }
+            };
         }
+
         let tr = [...document.getElementsByClassName("userRow")];
 
         for (let c = 10; c < arr.length; c++) {
             tr[c].style.display = "none";
         }
 
-        let user = [...document.getElementsByClassName("col1")];
-
-        // for(let c = 0; c < arr.length; c++){
-        //     user[c].addEventListener('click', () => {
-        //         const section = document.getElementById("prin-section");
-        //         section.innerHTML = ``;
-        //         renderSearch(user[c].innerHTML, arr);
-        //     })
-        // }
-
-        let btnCont = 10;
-        let btnContAux = btnCont + 10;
-
-        document.getElementById("bMore").onclick = function() {
-            for (let c = btnCont; c < btnContAux; c++) {
-                if (typeof tr[c] === "undefined") {
-                    section.innerHTML += `<p id = "final-row">ACABOU SEUS CONTATOS</p>`;
-                    document.getElementById("bMore").style.display = "none";
-                    break;
-                } else {
-                    tr[c].style.display = "table-row";
-                }
-            }
-            btnCont = btnCont + 10;
-            btnContAux = btnCont + 10;
-        };
-    }
-
-    renderPrin();
-
-    function renderFav(){
-        const arr = [...window.state.contacts];
-        const section = document.getElementById("prin-section");
-        section.innerHTML = markupTable();
-        section.innerHTML += markupBtn();
+        let userId = [...document.getElementsByClassName("col0")];
+        let userName = [...document.getElementsByClassName("col3")];
 
         for (let c = 0; c < arr.length; c++) {
-            let aux = document.getElementById("prin-table");
-            if(arr[c].isFavorite){
-                aux.innerHTML += markupTr(c, arr);
-            }
-        }
-
-        let star = [...document.getElementsByClassName("star")];
-        for(let c = 0; c < arr.length; c++){
-            if(typeof star[c] !== "undefined"){
-                star[c].setAttribute("checked", "yes");
-            }
-        }
-
-        let tr = [...document.getElementsByClassName("userRow")];
-
-        for (let c = 10; c < arr.length; c++) {
-            if(typeof star[c] !== "undefined"){
-                tr[c].style.display = "none";
-            }
+            userName[c].addEventListener("click", () => {
+                const section = document.getElementById("prin-section");
+                section.innerHTML = ``;
+                renderSearch(userId[c].innerHTML, arr);
+            });
         }
 
         let btnCont = 10;
@@ -146,7 +143,10 @@ export const renderList = async () => {
         document.getElementById("bMore").onclick = function() {
             for (let c = btnCont; c < btnContAux; c++) {
                 if (typeof tr[c] === "undefined") {
-                    section.innerHTML += `<p id = "final-row">ACABOU SEUS CONTATOS</p>`;
+                    section.insertAdjacentHTML(
+                        "beforeend",
+                        '<p id = "final-row">ACABOU SEUS CONTATOS</p>'
+                    );
                     document.getElementById("bMore").style.display = "none";
                     break;
                 } else {
@@ -158,16 +158,43 @@ export const renderList = async () => {
         };
     }
 
-    document.getElementById("all-list").addEventListener('click', () => {
+    renderPrin(arry);
+
+
+    function checkFav(arry){
+        const favArr = [];
+        for (let c = 0; c < arry.length; c++) {
+            if (arry[c].isFavorite) {
+                favArr.push(arry[c]);
+            }
+        }
+        return favArr;
+    }
+
+    document.getElementById("all-list").addEventListener("click", () => {
         const section = document.getElementById("prin-section");
         section.innerHTML = ``;
-        renderPrin();
-    })
+        renderPrin(arry);
+    });
 
-    document.getElementById("fav-list").addEventListener('click', () => {
+    document.getElementById("fav-list").addEventListener("click", () => {
         const section = document.getElementById("prin-section");
         section.innerHTML = ``;
-        renderFav();
-    })
+        const fArr = checkFav(arry);
+        renderPrin(fArr);
 
-   }
+    });
+
+    search();
+};
+
+// var x = document.getElementsByTagName("footer")[0];
+
+        // window.onscroll = function() {
+        //     if(x.scrollHeight - x.scrollTop === x.clientHeight){
+        //         console.log(x.scrollHeight)
+        //         console.log(x.scrollTop)
+        //         console.log(x.clientHeight)
+        //     }
+
+        // }
