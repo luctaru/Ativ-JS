@@ -17,7 +17,7 @@ fieldset p{
     margin-left: 12%;
 }
 
-input, select{
+.input-form, select{
     font-size: 13pt;
     width: 50%;
     margin: auto;
@@ -28,18 +28,14 @@ legend{
     font-size: 13pt;
 }
 
-#cont-img{
-    border-radius: 50px;
-    background-color: #e4959e;
-}
-
 #add-img{
     padding: auto;
+    transition: 0.5s;
 }
 
 #add-img:hover{
     cursor: pointer;
-    background-color: gray;
+    background-color: #e4959e;
     border-radius: 5px;
 }
 

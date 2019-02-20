@@ -1,3 +1,4 @@
+import sicon from '../_img/search-icon.png'
 
 export const renderNav = async () => {
     function markup() {
@@ -15,13 +16,12 @@ export const renderNav = async () => {
                 </ul>
             </nav>
 
-            <form class="search" id="searchForm">
-            <input type="text" name="nSearch" id="iSearch" size="50" maxlength="50"
-                placeholder="Digite o nome do contato..." />
-            <button class="ani-button" type="submit">
-            <span><i>Procurar</i></span>
-            </button>
-        </form>`;
+            <div id="search-box">
+                <img id="search-icon" src="${sicon}"/>
+                <input type="text" name="nSearch" id="iSearch" size="50" maxlength="50"
+                    placeholder="Digite o nome do contato..." />
+            </div>`;
+
             return m;
     }
 

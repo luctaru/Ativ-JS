@@ -1,5 +1,9 @@
 import { Api } from "./api.js";
 import { renderSearch } from "./contact-search.js";
+import { renderAdd } from "./add.js";
+import bstar from "../_img/blankstar-icon.png";
+import ystar from "../_img/star-icon.png";
+import { format } from "util";
 
 const api = new Api();
 
@@ -10,10 +14,11 @@ export const renderList = async () => {
         const m = `
         <tr class="userRow">
             <td class="col0" style="display:none">${ary[z].id}</td>
-            <td class="col1"><input class="check" type="checkbox" />
+            <td class="col1">
+                <input class="check" type="checkbox" />
             </td>
             <td class="col2">
-                <input class="star" type="checkbox"/>
+                <img class="star" src="${bstar}"/>
             </td>
             <td class="col3">${ary[z].firstName}
             </td>
@@ -29,7 +34,7 @@ export const renderList = async () => {
         const m = `
         <table id="prin-table">
             <tr id="fRow">
-            <td class="col1"><input class="check" type="checkbox" />
+            <td><input id="check-all" class="check" type="checkbox" />
             <td colspan="2">Nome</td>
             <td class="col4">Sobrenome</td>
             <td class="col5">E-mail</td>
@@ -41,26 +46,6 @@ export const renderList = async () => {
     function markupBtn() {
         const m = `
         <input id="bMore" class="btn" type="button" value="Mais..."/>`;
-        return m;
-    }
-
-    function markupFav(ary) {
-        const m = `
-
-        <tr class="userRow">
-            <td class="col0" style="display:none">${ary.id}</td>
-            <td class="col1"><input class="check" type="checkbox" />
-            </td>
-            <td class="col2">
-                <input class="star" type="checkbox"/>
-            </td>
-            <td class="col3">${ary.firstName}
-            </td>
-            <td class="col4">${ary.lastName}
-            </td>
-            <td class="col5">${ary.email}
-            </td>
-        </tr>`;
         return m;
     }
 
@@ -83,18 +68,17 @@ export const renderList = async () => {
                 ...window.state,
                 filter: value
             };
-            console.log(window.state.filter)
+            console.log(window.state.filter);
         };
     }
-
-
 
     const arry = [...window.state.contacts];
 
     function renderPrin(arr) {
         document.getElementById("edit-list").style.display = "none";
-        document.getElementById("searchForm").style.display = "initial";
-
+        document.getElementById("iSearch").style.display = "initial";
+        document.getElementById("add-list").style.display = "initial";
+        document.getElementById("rm-list").style.display = "initial";
 
         const section = document.getElementById("prin-section");
         section.insertAdjacentHTML("beforeend", markupTable());
@@ -108,19 +92,76 @@ export const renderList = async () => {
         let star = [...document.getElementsByClassName("star")];
         for (let c = 0; c < arr.length; c++) {
             if (arr[c].isFavorite) {
-                star[c].setAttribute("checked", "yes");
+                star[c].src = ystar;
             }
-            star[c].onchange = function() {
-                if (!star[c].checked) {
+            star[c].addEventListener("click", () => {
+                if (arr[c].isFavorite) {
+                    star[c].src = bstar;
                     arr[c].isFavorite = false;
-
                 } else {
+                    star[c].src = ystar;
                     arr[c].isFavorite = true;
                 }
-            };
+            });
         }
 
         let tr = [...document.getElementsByClassName("userRow")];
+
+        let checkbox = [...document.getElementsByClassName("check")];
+
+        console.log(checkbox);
+
+        document.getElementById("check-all").addEventListener("change", () => {
+            if (!document.getElementById("check-all").checked) {
+                for (let c = 0; c < checkbox.length; c++) {
+                    checkbox[c].checked = false;
+                }
+                document.getElementById("check-all").checked = false;
+                for (let m = 0; m < tr.length; m++) {
+                    const a = tr[m].getElementsByTagName("td");
+                    for (let n = 1; n < a.length; n++) {
+                        a[n].setAttribute("style", "background-color:#efdae6");
+                    }
+                }
+            } else if (document.getElementById("check-all").checked) {
+                document.getElementById("check-all").checked = true;
+                for (let c = 0; c < checkbox.length; c++) {
+                    checkbox[c].checked = true;
+                }
+                for (let m = 0; m < tr.length; m++) {
+                    const a = tr[m].getElementsByTagName("td");
+                    for (let n = 1; n < a.length; n++) {
+                        a[n].setAttribute("style", "background-color:#ACADBC");
+                    }
+                }
+            }
+        });
+
+        let tr2 = [0, ...document.getElementsByClassName("userRow")];
+
+        for (let c = 1; c < checkbox.length; c++) {
+            checkbox[c].addEventListener("change", () => {
+                if (!checkbox[c].checked) {
+                    checkbox[c].checked = false;
+                    const tdCheck = [...tr2[c].getElementsByTagName("td")];
+                    for (let n = 1; n < tdCheck.length; n++) {
+                        tdCheck[n].setAttribute(
+                            "style",
+                            "background-color: #efdae6"
+                        );
+                    }
+                } else if (checkbox[c].checked) {
+                    checkbox[c].checked = true;
+                    const tdCheck = [...tr2[c].getElementsByTagName("td")];
+                    for (let n = 1; n < tdCheck.length; n++) {
+                        tdCheck[n].setAttribute(
+                            "style",
+                            "background-color: #ACADBC"
+                        );
+                    }
+                }
+            });
+        }
 
         for (let c = 10; c < arr.length; c++) {
             tr[c].style.display = "none";
@@ -160,8 +201,7 @@ export const renderList = async () => {
 
     renderPrin(arry);
 
-
-    function checkFav(arry){
+    function checkFav(arry) {
         const favArr = [];
         for (let c = 0; c < arry.length; c++) {
             if (arry[c].isFavorite) {
@@ -182,7 +222,12 @@ export const renderList = async () => {
         section.innerHTML = ``;
         const fArr = checkFav(arry);
         renderPrin(fArr);
+    });
 
+    document.getElementById("add-list").addEventListener("click", () => {
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        renderAdd();
     });
 
     search();
@@ -190,11 +235,11 @@ export const renderList = async () => {
 
 // var x = document.getElementsByTagName("footer")[0];
 
-        // window.onscroll = function() {
-        //     if(x.scrollHeight - x.scrollTop === x.clientHeight){
-        //         console.log(x.scrollHeight)
-        //         console.log(x.scrollTop)
-        //         console.log(x.clientHeight)
-        //     }
+// window.onscroll = function() {
+//     if(x.scrollHeight - x.scrollTop === x.clientHeight){
+//         console.log(x.scrollHeight)
+//         console.log(x.scrollTop)
+//         console.log(x.clientHeight)
+//     }
 
-        // }
+// }

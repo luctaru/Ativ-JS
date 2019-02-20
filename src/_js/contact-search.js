@@ -1,4 +1,5 @@
 import { Api } from "./api.js";
+import {renderEdit} from "./edit.js"
 
 const api = new Api();
 
@@ -6,7 +7,7 @@ export const renderSearch = async (id, arr) => {
 
     await api.contSearch(id);
 
-    document.getElementById("searchForm").style.display = "none";
+    document.getElementById("search-box").style.display = "none";
     document.getElementById("edit-list").style.display = "initial";
 
     const cont = window.state.filter;
@@ -25,7 +26,7 @@ export const renderSearch = async (id, arr) => {
     function markup(){
         const m = `<div class="div-top">
         <div class="div-mid">
-            <p><img src="${cont.info.avatar}"></p>
+            <p><img style="width:150px" src="${cont.info.avatar}"></p>
         </div>
         <div class="div-mid">
             <p>${cont.firstName} ${cont.lastName}</p>
@@ -51,6 +52,12 @@ export const renderSearch = async (id, arr) => {
     }
 
     section.insertAdjacentHTML('beforeend', markup());
+
+    document.getElementById("edit-list").addEventListener("click", () => {
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        renderEdit();
+    })
 
 }
 {/*  */}

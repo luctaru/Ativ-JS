@@ -111,19 +111,33 @@ nav ul li:hover{
     background-color: #56cbf9;
 }
 
-.search{
+/* .search{
     margin: auto;
     margin-bottom: 1%;
     padding: auto;
     float: right;
+} */
+
+
+#search-box{
+    display: flex;
+    flex-wrap: nowrap;
+    float: right;
 }
 
 #iSearch{
-    margin: 3px;
-    padding: 3px;
-    height: 20px;
+    margin: 2.5%;
+    padding: auto;
+    height: 1.8em;
     font-size: 13pt;
-    width: 50%;
+    width: 87%;
+    float: right;
+}
+
+#search-icon{
+    padding: auto;
+    padding-top: 3%;
+    height: 25px;
 }
 
 .ani-button{
@@ -138,6 +152,7 @@ nav ul li:hover{
     font-family: 'Comfortaa', cursive;
     height: 30px;
     transition: all 0.5s;
+    margin: 2%;
 }
 
 .ani-button span {
@@ -179,6 +194,11 @@ table td{
     text-align: left;
     vertical-align: middle;
     background-color: #efdae6;
+    transition: 0.5s;
+}
+
+.star:hover{
+    cursor: pointer;
 }
 
 #fRow td{
@@ -295,8 +315,16 @@ table td{
         height: 2em;
         width: 2em;
     }
+    .star{
+        width: 2em;
+        height: 2em;
+    }
     #iSearch{
         height: 2em;
         width: 12em;
+    }
+    #search-icon{
+        width: 2.5em;
+        height: 2em;
     }
   }
