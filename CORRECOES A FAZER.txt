@@ -1,0 +1,10 @@
+BUG QUANDO FOR DELETAR DENTRO DO CONTATO
+
+BUG SOME A BARRA DE PESQUISA
+https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_filter_table
+
+FILTRO PERSISTENTE
+https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+dois localStorage
+
+ESTRUTURAR PASTAS

@@ -1,6 +1,6 @@
 import { Api } from "./api.js";
 import {renderEdit} from "./edit.js"
-
+import {renderPrin} from "./contact-list.js"
 const api = new Api();
 
 export const renderSearch = async (id, arr) => {
@@ -59,5 +59,10 @@ export const renderSearch = async (id, arr) => {
         renderEdit();
     })
 
+    document.getElementById("rm-list").addEventListener("click", async() => {
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        await api.contDel(cont.id);
+    })
+
 }
-{/*  */}

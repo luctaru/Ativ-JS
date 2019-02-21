@@ -201,8 +201,12 @@ table td{
     cursor: pointer;
 }
 
-#fRow td{
+#fRow th{
     background-color: rgba(209, 17, 73, .9);
+    border: 1px solid black;
+    font-size: 15pt;
+    text-align: left;
+    padding: 5px 20px 5px 20px;
 }
 
 #final-row{

@@ -1,7 +1,7 @@
 export class Api {
 
     async cont() {
-        const res = await fetch('http://contacts-api.azurewebsites.net/api/contacts?limit=30');
+        const res = await fetch('http://contacts-api.azurewebsites.net/api/contacts');
         const data = await res.json();
         window.state = {
             ...window.state,
@@ -11,7 +11,7 @@ export class Api {
     }
 
   async contSearch(id){
-    const res = await fetch("http://contacts-api.azurewebsites.net//api/contacts/"+ id);
+    const res = await fetch("http://contacts-api.azurewebsites.net/api/contacts/"+ id);
     const data = await res.json();
     window.state = {
         ...window.state,
@@ -20,17 +20,27 @@ export class Api {
     }
   }
 
-  contAdd(id, c){
-    // let res = fetch("http://contacts-api.azurewebsites.net/api/contacts/", {
-    //   method: "get"
-    // })
-    // return res;
+  async contAdd(data){
+    let res = await fetch("http://contacts-api.azurewebsites.net/api/contacts/", {
+      method: "post",
+      headers: {'Accept': 'application/json', 'Content-type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    console.log(res);
   }
 
-  contDel(id) {
-    let res = fetch("http://contacts-api.azurewebsites.net/api/contacts/" + id, {
+  async contEdit(data, id){
+    let res = await fetch("http://contacts-api.azurewebsites.net/api/contacts/" + id, {
+      method: "put",
+      headers: {'Accept': 'application/json', 'Content-type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    console.log(res);
+  }
+
+  async contDel(id) {
+    let res = await fetch("http://contacts-api.azurewebsites.net/api/contacts/" + id, {
       method: "delete"
     });
-    return res;
   }
 }
