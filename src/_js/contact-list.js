@@ -47,64 +47,27 @@ const markupBtn = () => {
 };
 
 const search = () => {
-    // const { contacts, filter, loading } = window.state;
-    // const contactsMatch = contacts.filter(c =>
-    //     new RegExp(filter).test(c.firstName)
-    // );
-
-    //     const tb = document.getElementById("prin-table")
-
-    // for (const contact of contactsMatch) {
-    //     tb.insertAdjacentHTML('beforeend', markupFav(contact)) ;
-    // }
-
-    // document.getElementById("iSearch").onkeyup = ({
-    //     target: { value }
-    // }) => {
-    //     window.state = {
-    //         ...window.state,
-    //         filter: value
-    //     };
-    //     console.log(window.state.filter);
-    // };
-    document.getElementById("iSearch").onkeyup = () =>{
+    document.getElementById("iSearch").onkeyup = () => {
         let input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("iSearch");
         filter = input.value.toUpperCase();
         table = document.getElementById("prin-table");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[3];
-        if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
             }
         }
-        }
-    }
-
+    };
 };
 
-export const renderPrin = arr => {
-    document.getElementById("edit-list").style.display = "none";
-    document.getElementById("iSearch").style.display = "initial";
-    document.getElementById("add-list").style.display = "initial";
-    document.getElementById("rm-list").style.display = "initial";
-
-    const section = document.getElementById("prin-section");
-    //table and 'more' button insertion
-    section.insertAdjacentHTML("beforeend", markupTable());
-    section.insertAdjacentHTML("beforeend", markupBtn());
-
-    //contacts insertion
-    for (let c = 0; c < arr.length; c++) {
-        let aux = document.getElementById("prin-table");
-        aux.insertAdjacentHTML("beforeend", markupTr(c, arr));
-    }
-
+const st = arr => {
     //checking if contact is favorite and changing star
     let star = [...document.getElementsByClassName("star")];
     for (let c = 0; c < arr.length; c++) {
@@ -121,7 +84,9 @@ export const renderPrin = arr => {
             }
         });
     }
+};
 
+const chAll = () => {
     let tr = [...document.getElementsByClassName("userRow")];
 
     let checkbox = [...document.getElementsByClassName("check")];
@@ -152,9 +117,12 @@ export const renderPrin = arr => {
             }
         }
     });
+};
 
+const chOne = () => {
     let tr2 = [0, ...document.getElementsByClassName("userRow")];
 
+    let checkbox = [...document.getElementsByClassName("check")];
     //changing specific checkbox when clicked
     for (let c = 1; c < checkbox.length; c++) {
         checkbox[c].addEventListener("change", () => {
@@ -179,64 +147,159 @@ export const renderPrin = arr => {
             }
         });
     }
+};
 
-    //hiding contacts from second page and beyond
-    for (let c = 10; c < arr.length; c++) {
-        tr[c].style.display = "none";
-    }
-
-    let userId = [...document.getElementsByClassName("col0")];
-    let userName = [...document.getElementsByClassName("col3")];
-
-    //adding event to render the contact info
-    for (let c = 0; c < arr.length; c++) {
-        userName[c].addEventListener("click", () => {
+const contInfo = () => {
+    let t = document.getElementById("prin-table");
+    let contId = t.getElementsByClassName("col0");
+    let contName = t.getElementsByClassName("col3");
+    for (let c = 0; c < contName.length; c++) {
+        contName[c].addEventListener("click", () => {
             const section = document.getElementById("prin-section");
             section.innerHTML = ``;
-            renderSearch(userId[c].innerHTML, arr);
+            renderSearch(contId[c].innerHTML);
         });
     }
+};
 
-    let btnCont = 10;
-    let btnContAux = btnCont + 10;
-
-    //button to show more 10 contacts
-    document.getElementById("bMore").onclick = function() {
-        for (let c = btnCont; c < btnContAux; c++) {
-            if (typeof tr[c] === "undefined") {
-                section.insertAdjacentHTML(
-                    "beforeend",
-                    '<p id = "final-row">ACABOU SEUS CONTATOS</p>'
-                );
-                document.getElementById("bMore").style.display = "none";
-                break;
-            } else {
-                tr[c].style.display = "table-row";
-            }
+//making an array of favorites
+const checkFav = arry => {
+    const favArr = [];
+    for (let c = 0; c < arry.length; c++) {
+        if (arry[c].isFavorite) {
+            favArr.push(arry[c]);
         }
-        btnCont = btnCont + 10;
-        btnContAux = btnCont + 10;
-    };
+    }
+    return favArr;
+};
+
+export const renderPrin = arr => {
+    document.getElementById("edit-list").style.display = "none";
+    document.getElementById("search-box").style.display = "initial";
+    document.getElementById("add-list").style.display = "initial";
+    document.getElementById("rm-list").style.display = "initial";
+
+    const section = document.getElementById("prin-section");
+    //table and 'more' button insertion
+    section.insertAdjacentHTML("beforeend", markupTable());
+    section.insertAdjacentHTML("beforeend", markupBtn());
+
+    //contacts insertion
+
+    for (let c = 0; c < arr.length; c++) {
+        let aux = document.getElementById("prin-table");
+        aux.insertAdjacentHTML("beforeend", markupTr(c, arr));
+    }
+
+    st(arr);
+
+    chAll();
+
+    chOne();
+
+    contInfo();
+
+};
+
+const bt = () => {
+    //button to show more 10 contacts
+
+    let skip = 10;
+
+    document.getElementById("bMore").addEventListener("click", async () => {
+        skip += 10;
+        await api.cont(skip);
+        const arrAux = [];
+        const favAux = [];
+        window.state.contacts.map(item => {
+            arrAux.push(item);
+            if(item.isFavorite){
+                favAux.push(item);
+            }
+        });
+        console.log(arrAux);
+            for (let c = 0; c < arrAux.length; c++) {
+                let aux = document.getElementById("prin-table");
+                aux.insertAdjacentHTML("beforeend", markupTr(c, arrAux));
+            }
+
+        chAll();
+
+        chOne();
+        contInfo();
+    });
 };
 
 export const renderList = async () => {
-    await api.cont();
+    await api.cont(10);
 
     const arry = [...window.state.contacts];
+    console.log(arry);
+    const handleOnScroll = async () => {
+        const scrollTop =
+            (document.documentElement && document.documentElement.scrollTop) ||
+            document.body.scrollTop;
+        const scrollHeight =
+            (document.documentElement &&
+                document.documentElement.scrollHeight) ||
+            document.body.scrollHeight;
+        const clientHeight =
+            document.documentElement.clientHeight || window.innerHeight;
+        const scrolledToBottom =
+            Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+
+        if (scrolledToBottom && end == false) {
+            console.log("final");
+            skip += 10;
+            const data = await api.cont(skip);
+            console.log(data);
+            data.map(item => {
+                arrAux.push(item);
+            });
+            // if (typeof tr === "undefined") {
+            //     section.insertAdjacentHTML(
+            //         "beforeend",
+            //         '<p id = "final-row">ACABOU SEUS CONTATOS</p>'
+            //     );
+            //     document.getElementById("bMore").style.display = "none";
+            //     end = true;
+            // }
+        }
+        const section = document.getElementById("prin-section");
+        section.innerHTML = ``;
+        renderPrin(arrAux);
+    };
+
+    //window.addEventListener("scroll", () => handleOnScroll());
 
     document.getElementById("all-list").addEventListener("click", () => {
         const section = document.getElementById("prin-section");
+        document.getElementById("search-box").style.display = "initial";
         section.innerHTML = ``;
         favornot = false;
-        renderPrin(arry);
+        localStorage.setItem("bool", false);
+        renderPrin(window.state.contacts);
+        bt();
     });
 
-    document.getElementById("fav-list").addEventListener("click", () => {
+    document.getElementById("fav-list").addEventListener("click", async() => {
         const section = document.getElementById("prin-section");
+        document.getElementById("search-box").style.display = "initial";
         section.innerHTML = ``;
-        const fArr = checkFav(arry);
+        let fArr = checkFav(window.state.contacts);
+        console.log(fArr)
+        console.log(fArr.length)
+        if(fArr.length < 10){
+            console.log("entrou")
+            await api.cont(10);
+            fArr = [...checkFav(window.state.contacts)];
+        }
+        //console.log(JSON.stringify(fArr));
         favornot = true;
+        localStorage.setItem("bool", true);
+        localStorage.setItem("favA", JSON.stringify(fArr));
         renderPrin(fArr);
+        bt();
     });
 
     document.getElementById("add-list").addEventListener("click", () => {
@@ -253,43 +316,27 @@ export const renderList = async () => {
                 await api.contDel(userId[c].innerHTML);
             }
         }
-        await api.cont();
+        await api.cont(10);
         const section = document.getElementById("prin-section");
         section.innerHTML = ``;
-        const arry2 = [...window.state.contacts];
-        const fArr = checkFav(arry2);
+        const fArr = checkFav(window.state.contacts);
         if (favornot) {
             renderPrin(fArr);
         } else {
-            renderPrin(arry2);
+            renderPrin(window.state.contacts);
         }
     });
 
     //render principal table
-    renderPrin(arry);
-
-    //making a array of favorites
-    function checkFav(arry) {
-        const favArr = [];
-        for (let c = 0; c < arry.length; c++) {
-            if (arry[c].isFavorite) {
-                favArr.push(arry[c]);
-            }
-        }
-        return favArr;
+    if (localStorage.getItem("bool") === "true") {
+        renderPrin(JSON.parse(localStorage.getItem("favA")));
+        bt();
+    } else if (localStorage.getItem("bool") === "false") {
+        renderPrin(arry);
+        bt();
     }
 
     let favornot = false;
 
     search();
 };
-
-// var x = document.getElementsByTagName("footer")[0];
-
-// window.onscroll = function() {
-//     if(x.scrollHeight - x.scrollTop === x.clientHeight){
-//         console.log(x.scrollHeight)
-//         console.log(x.scrollTop)
-//         console.log(x.clientHeight)
-//     }
-// }

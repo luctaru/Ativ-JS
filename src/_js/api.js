@@ -1,7 +1,7 @@
 export class Api {
 
-    async cont() {
-        const res = await fetch('http://contacts-api.azurewebsites.net/api/contacts');
+    async cont(skip) {
+        const res = await fetch(`http://contacts-api.azurewebsites.net/api/contacts?limit=10&skip=${skip}`);
         const data = await res.json();
         window.state = {
             ...window.state,

@@ -1,9 +1,8 @@
 import { Api } from "./api.js";
 import {renderEdit} from "./edit.js"
-import {renderPrin} from "./contact-list.js"
 const api = new Api();
 
-export const renderSearch = async (id, arr) => {
+export const renderSearch = async (id) => {
 
     await api.contSearch(id);
 
@@ -60,9 +59,8 @@ export const renderSearch = async (id, arr) => {
     })
 
     document.getElementById("rm-list").addEventListener("click", async() => {
-        const section = document.getElementById("prin-section");
-        section.innerHTML = ``;
         await api.contDel(cont.id);
+        location.reload();
     })
 
 }
