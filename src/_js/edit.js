@@ -30,18 +30,35 @@ export const edit = async(bool, img) =>{
     const address = num + ' ' + street + ', ' + state + ', ' + city;
 
     if(bool){
-        const send = {
-            "firstName": name,
-            "lastName": surname,
-            "email": email,
-            "gender": genAux,
-            "isFavorite": false,
-            "company": comp,
-            "avatar": img,
-            "address": address,
-            "phone": phone,
-            "comments": msg
+        let send = {};
+        if(localStorage.getItem("bool") === "true"){
+            send = {
+                "firstName": name,
+                "lastName": surname,
+                "email": email,
+                "gender": genAux,
+                "isFavorite": true,
+                "company": comp,
+                "avatar": img,
+                "address": address,
+                "phone": phone,
+                "comments": msg
+            }
+        } else{
+            send = {
+                "firstName": name,
+                "lastName": surname,
+                "email": email,
+                "gender": genAux,
+                "isFavorite": false,
+                "company": comp,
+                "avatar": img,
+                "address": address,
+                "phone": phone,
+                "comments": msg
+            }
         }
+        
         await api.contEdit(send, filter.id);
         window.state = {
             ...window.state,

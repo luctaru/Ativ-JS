@@ -1,11 +1,19 @@
 export class Api {
 
-    async cont(skip) {
-        const res = await fetch(`http://contacts-api.azurewebsites.net/api/contacts?limit=10&skip=${skip}`);
+    async cont() {
+        const res = await fetch(`http://contacts-api.azurewebsites.net/api/contacts`);
         const data = await res.json();
+        let favData = [];
+        data.map(item => {
+          if(item.isFavorite){
+            favData.push(item);
+          }
+        })
+        
         window.state = {
             ...window.state,
             contacts: data,
+            favorites: favData,
             loading: false
         }
     }
@@ -30,6 +38,7 @@ export class Api {
   }
 
   async contEdit(data, id){
+    console.log(data)
     let res = await fetch("http://contacts-api.azurewebsites.net/api/contacts/" + id, {
       method: "put",
       headers: {'Accept': 'application/json', 'Content-type': 'application/json'},

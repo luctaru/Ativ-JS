@@ -7,7 +7,8 @@ import { renderNav } from './_js/nav.js';
 window.state = {
     loading: true,
     filter: '',
-    contacts: []
+    contacts: [],
+    favorites: []
 }
 
 renderNav();
