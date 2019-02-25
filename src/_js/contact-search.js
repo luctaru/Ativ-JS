@@ -1,9 +1,8 @@
 import { Api } from "./api.js";
-import {renderEdit} from "./edit.js"
+import { renderEdit } from "./edit.js";
 const api = new Api();
 
-export const renderSearch = async (id) => {
-
+export const renderSearch = async id => {
     await api.contSearch(id);
 
     document.getElementById("search-box").style.display = "none";
@@ -15,14 +14,13 @@ export const renderSearch = async (id) => {
 
     let aux;
 
-    if(cont.gender == 'f'){
-        aux = 'Female';
-    }
-    else{
-        aux = 'Male';
+    if (cont.gender == "f") {
+        aux = "Female";
+    } else {
+        aux = "Male";
     }
 
-    function markup(){
+    const markup = () => {
         const m = `<div class="div-top">
         <div class="div-mid">
             <p><img style="width:150px" src="${cont.info.avatar}"></p>
@@ -47,20 +45,19 @@ export const renderSearch = async (id) => {
         <p>${cont.info.comments}
         </p>
     </div>`;
-    return m;
-    }
+        return m;
+    };
 
-    section.insertAdjacentHTML('beforeend', markup());
+    section.insertAdjacentHTML("beforeend", markup());
 
     document.getElementById("edit-list").addEventListener("click", () => {
         const section = document.getElementById("prin-section");
         section.innerHTML = ``;
         renderEdit();
-    })
+    });
 
-    document.getElementById("rm-list").addEventListener("click", async() => {
+    document.getElementById("rm-list").addEventListener("click", async () => {
         await api.contDel(cont.id);
         location.reload();
-    })
-
-}
+    });
+};

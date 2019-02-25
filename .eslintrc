@@ -1,64 +1,19 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb", "prettier"],
-  "plugins": ["react", "prettier"],
-  "env": {
-    "jest": true,
-    "browser": true
-  },
-  "rules": {
-    "prettier/prettier": "error",
-    "lines-between-class-members": 0,
-    "import/order": [
-      "error",
-      {
-        "newlines-between": "always",
-        "groups": ["builtin", "external"]
-      }
-    ],
-    "import/prefer-default-export": ["off"],
-    "react/jsx-one-expression-per-line": ["off"],
-    "class-methods-use-this": ["off"],
-    "global-require": ["off"],
-    "no-console": ["warn"],
-    "no-multiple-empty-lines": [
-      "error",
-      {
-        "max": 1
-      }
-    ],
-    "prefer-destructuring": [
-      "error",
-      {
-        "object": false,
-        "array": false
-      }
-    ],
-    "react/destructuring-assignment": ["off"],
-    "no-nested-ternary": "off",
-    "react/no-did-update-set-state": ["off"],
-    "object-shorthand": ["error", "always"],
-    "react/jsx-filename-extension": [
-      "error",
-      {
-        "extensions": [".js", ".jsx"]
-      }
-    ],
-  "extends": "eslint:recommended",
-  "env": {
-    "es6": true,
-    "commonjs": true,
-    "browser": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "rules": {
-    "no-console": 0,
-    "no-var": "error",
-    "prefer-const": "error",
-    "func-style":"error",
-    "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }]
+    "extends": "eslint:recommended",
+    "env": {
+      "es6": true,
+      "commonjs": true,
+      "browser": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": 0,
+      "no-var": "error",
+      "prefer-const": "error",
+      "func-style":"error",
+      "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }]
+    }
   }
-}

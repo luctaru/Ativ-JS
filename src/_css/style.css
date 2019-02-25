@@ -23,9 +23,6 @@ header{
     box-shadow: 3px 3px 3px black;
 }
 
-section{
-}
-
 header h1{
     margin: auto;
 }
@@ -83,7 +80,6 @@ nav ul li:hover{
 .list a{
     text-decoration: none;
     color: whitesmoke;
-     /* border: 1px solid red;  */
     padding: 10px;
 }
 
@@ -111,32 +107,42 @@ nav ul li:hover{
     background-color: #56cbf9;
 }
 
-/* .search{
-    margin: auto;
-    margin-bottom: 1%;
-    padding: auto;
-    float: right;
-} */
-
-
 #search-box{
     display: flex;
     flex-wrap: nowrap;
     float: right;
+    margin-bottom: 1%;
+    margin-right: 2%;
+    padding: auto;
 }
 
+#searchButton {
+    width: 40px;
+    height: 36px;
+    border: 1px solid #9e3d4d;
+    background: #9e3d4d;
+    text-align: center;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 2px 2px 2px black;
+    transition: 0.5s;
+  }
+
+  #searchButton:hover {
+    border: 1px solid #e4959e ;
+    background: #e4959e;
+  }
+
 #iSearch{
-    margin: 2.5%;
     padding: auto;
     height: 1.8em;
     font-size: 13pt;
-    width: 87%;
-    float: right;
 }
 
 #search-icon{
     padding: auto;
-    padding-top: 3%;
     height: 25px;
 }
 
@@ -328,7 +334,7 @@ table td{
         width: 12em;
     }
     #search-icon{
-        width: 2.5em;
-        height: 2em;
+        width: 1.5em;
+        height: 1em;
     }
   }

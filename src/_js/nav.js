@@ -1,7 +1,7 @@
-import sicon from '../_img/search-icon.png'
+import sicon from "../_img/search-icon.png";
 
 export const renderNav = async () => {
-    function markup() {
+    const markup = () => {
         const m = `
             <nav id="org">
                 <h2>Contatos:</h2>
@@ -17,15 +17,16 @@ export const renderNav = async () => {
             </nav>
 
             <div id="search-box">
-                <img id="search-icon" src="${sicon}"/>
                 <input type="text" name="nSearch" id="iSearch" size="50" maxlength="50"
                     placeholder="Digite o nome do contato..." />
+                    <button type="submit" id="searchButton">
+                        <img id="search-icon" src="${sicon}"/>
+                    </button>
+
             </div>`;
 
-            return m;
-    }
+        return m;
+    };
 
-    document.getElementById("root").insertAdjacentHTML('afterbegin', markup());
-
-
+    document.getElementById("root").insertAdjacentHTML("afterbegin", markup());
 };

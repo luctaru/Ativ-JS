@@ -3,7 +3,6 @@ import { renderSearch } from "./contact-search.js";
 import { renderAdd } from "./add.js";
 import bstar from "../_img/blankstar-icon.png";
 import ystar from "../_img/star-icon.png";
-import { renderNav } from "./nav.js";
 
 const api = new Api();
 
@@ -48,29 +47,41 @@ const markupBtn = () => {
 };
 
 const search = () => {
-    document.getElementById("iSearch").onkeyup = () => {
-        let input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("iSearch");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("prin-table");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[4];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
+    document.getElementById("searchButton").addEventListener("click", () => {
+        const input = document.getElementById("iSearch");
+        const filter = input.value.toUpperCase();
+
+        if (filter == "" || filter == null) {
+            alert("PLEASE FILL THE FIELD WITH A NAME FOR THE SEARCH");
+        } else {
+            const favArr = window.state.favorites;
+            const arr = window.state.contacts;
+            if (localStorage.getItem("bool") === "true") {
+                const searchContacts = favArr.filter(c =>
+                    new RegExp(filter, "ig").test(
+                        `${c.firstName} ${c.lastName}`.toLowerCase()
+                    )
+                );
+                const chunks = chunkArr(searchContacts);
+                renderPrin(chunks[0]);
+                bt(chunks);
+            } else {
+                const searchContacts = arr.filter(c =>
+                    new RegExp(filter, "ig").test(
+                        `${c.firstName} ${c.lastName}`.toLowerCase()
+                    )
+                );
+                const chunks = chunkArr(searchContacts);
+                renderPrin(chunks[0]);
+                bt(chunks);
             }
         }
-    };
+    });
 };
 
 const st = (arr, si) => {
     //checking if contact is favorite and changing star
-    let star = [...document.getElementsByClassName("star")];
+    const star = [...document.getElementsByClassName("star")];
     for (let c = 0; c < arr.length; c++) {
         if (arr[c].isFavorite) {
             star[si].src = ystar;
@@ -81,28 +92,10 @@ const st = (arr, si) => {
     }
 };
 
-// const stEvent = () => {
-//     let star = [...document.getElementsByClassName("star")];
-//     let colFav = [...document.getElementsByClassName("col6")]
-//     for (let c = 0; c < star.length; c++) {
-//         star[c].addEventListener("click", () => {
-//             console.log(colFav[c])
-//             if (colFav[c].innerHTML == "true") {
-//                 colFav[c].innerHTML = false;
-//                 star[c].src = bstar;
-//             } else {
-//                 colFav[c].innerHTML = true;
-//                 star[c].src = ystar;
-//             }
-//         });
-//     }
-
-// }
-
 const chAll = () => {
-    let tr = [...document.getElementsByClassName("userRow")];
+    const tr = [...document.getElementsByClassName("userRow")];
 
-    let checkbox = [...document.getElementsByClassName("check")];
+    const checkbox = [...document.getElementsByClassName("check")];
 
     //first checkbox changing all of them when clicked
     document.getElementById("check-all").addEventListener("change", () => {
@@ -133,9 +126,9 @@ const chAll = () => {
 };
 
 const chOne = () => {
-    let tr2 = [0, ...document.getElementsByClassName("userRow")];
+    const tr2 = [0, ...document.getElementsByClassName("userRow")];
 
-    let checkbox = [...document.getElementsByClassName("check")];
+    const checkbox = [...document.getElementsByClassName("check")];
     //changing specific checkbox when clicked
     for (let c = 1; c < checkbox.length; c++) {
         checkbox[c].addEventListener("change", () => {
@@ -163,9 +156,9 @@ const chOne = () => {
 };
 
 const contInfo = () => {
-    let t = document.getElementById("prin-table");
-    let contId = t.getElementsByClassName("col0");
-    let contName = t.getElementsByClassName("col3");
+    const t = document.getElementById("prin-table");
+    const contId = t.getElementsByClassName("col0");
+    const contName = t.getElementsByClassName("col3");
     for (let c = 0; c < contName.length; c++) {
         contName[c].addEventListener("click", () => {
             const section = document.getElementById("prin-section");
@@ -175,7 +168,7 @@ const contInfo = () => {
     }
 };
 
-export const renderPrin = (arr) => {
+export const renderPrin = arr => {
     const section = document.getElementById("prin-section");
     section.innerHTML = ``;
 
@@ -184,19 +177,18 @@ export const renderPrin = (arr) => {
     document.getElementById("add-list").style.display = "initial";
     document.getElementById("rm-list").style.display = "initial";
 
-
     //table and 'more' button insertion
     section.insertAdjacentHTML("beforeend", markupTable());
     section.insertAdjacentHTML("beforeend", markupBtn());
 
     for (let c = 0; c < arr.length; c++) {
-        let aux = document.getElementById("prin-table");
+        const aux = document.getElementById("prin-table");
         aux.insertAdjacentHTML("beforeend", markupTr(c, arr));
     }
 
     st(arr, 0);
 
-    let star = document.getElementsByClassName("star");
+    const star = document.getElementsByClassName("star");
     for (let c = 0; c < arr.length; c++) {
         star[c].addEventListener("click", async () => {
             if (arr[c].isFavorite) {
@@ -204,33 +196,33 @@ export const renderPrin = (arr) => {
                 arr[c].isFavorite = false;
 
                 const send = {
-                    "firstName": arr[c].firstName,
-                    "lastName": arr[c].lastName,
-                    "email": arr[c].email,
-                    "gender": arr[c].gender,
-                    "isFavorite": arr[c].isFavorite,
-                    "company": arr[c].info.company,
-                    "avatar": arr[c].info.avatar,
-                    "address": arr[c].info.address,
-                    "phone": arr[c].info.phone,
-                    "comments": arr[c].info.comments
-                }
+                    firstName: arr[c].firstName,
+                    lastName: arr[c].lastName,
+                    email: arr[c].email,
+                    gender: arr[c].gender,
+                    isFavorite: arr[c].isFavorite,
+                    company: arr[c].info.company,
+                    avatar: arr[c].info.avatar,
+                    address: arr[c].info.address,
+                    phone: arr[c].info.phone,
+                    comments: arr[c].info.comments
+                };
                 await api.contEdit(send, arr[c].id);
             } else {
                 star[c].src = ystar;
                 arr[c].isFavorite = true;
                 const send = {
-                    "firstName": arr[c].firstName,
-                    "lastName": arr[c].lastName,
-                    "email": arr[c].email,
-                    "gender": arr[c].gender,
-                    "isFavorite": arr[c].isFavorite,
-                    "company": arr[c].info.company,
-                    "avatar": arr[c].info.avatar,
-                    "address": arr[c].info.address,
-                    "phone": arr[c].info.phone,
-                    "comments": arr[c].info.comments
-                }
+                    firstName: arr[c].firstName,
+                    lastName: arr[c].lastName,
+                    email: arr[c].email,
+                    gender: arr[c].gender,
+                    isFavorite: arr[c].isFavorite,
+                    company: arr[c].info.company,
+                    avatar: arr[c].info.avatar,
+                    address: arr[c].info.address,
+                    phone: arr[c].info.phone,
+                    comments: arr[c].info.comments
+                };
                 await api.contEdit(send, arr[c].id);
             }
         });
@@ -242,14 +234,13 @@ export const renderPrin = (arr) => {
     chOne();
 
     contInfo();
-
 };
 
-const bt = (chunks) => {
+const bt = chunks => {
     //button to show more 10 contacts
     let i = 1;
     let si = 10;
-    let section = document.getElementById("prin-section");
+    const section = document.getElementById("prin-section");
     document.getElementById("bMore").addEventListener("click", async () => {
         if (typeof chunks[i] === "undefined") {
             section.insertAdjacentHTML(
@@ -259,49 +250,48 @@ const bt = (chunks) => {
             document.getElementById("bMore").style.display = "none";
         } else {
             for (let c = 0; c < chunks[i].length; c++) {
-                let aux = document.getElementById("prin-table");
+                const aux = document.getElementById("prin-table");
                 aux.insertAdjacentHTML("beforeend", markupTr(c, chunks[i]));
             }
 
             st(chunks[i], si);
 
-            let star = document.getElementsByClassName("star");
-            let arry = chunks[i];
+            const star = document.getElementsByClassName("star");
+            const arry = chunks[i];
             for (let c = si, x = -1; c < star.length; c++) {
-                
-                star[c].addEventListener("click", async () => {         
+                star[c].addEventListener("click", async () => {
                     if (arry[x].isFavorite) {
                         star[c].src = bstar;
                         arry[x].isFavorite = false;
 
                         const send = {
-                            "firstName": arry[x].firstName,
-                            "lastName": arry[x].lastName,
-                            "email": arry[x].email,
-                            "gender": arry[x].gender,
-                            "isFavorite": arry[x].isFavorite,
-                            "company": arry[x].info.company,
-                            "avatar": arry[x].info.avatar,
-                            "address": arry[x].info.address,
-                            "phone": arry[x].info.phone,
-                            "comments": arry[x].info.comments
-                        }
+                            firstName: arry[x].firstName,
+                            lastName: arry[x].lastName,
+                            email: arry[x].email,
+                            gender: arry[x].gender,
+                            isFavorite: arry[x].isFavorite,
+                            company: arry[x].info.company,
+                            avatar: arry[x].info.avatar,
+                            address: arry[x].info.address,
+                            phone: arry[x].info.phone,
+                            comments: arry[x].info.comments
+                        };
                         await api.contEdit(send, arry[x].id);
                     } else {
                         star[c].src = ystar;
                         arry[x].isFavorite = true;
                         const send = {
-                            "firstName": arry[x].firstName,
-                            "lastName": arry[x].lastName,
-                            "email": arry[x].email,
-                            "gender": arry[x].gender,
-                            "isFavorite": arry[x].isFavorite,
-                            "company": arry[x].info.company,
-                            "avatar": arry[x].info.avatar,
-                            "address": arry[x].info.address,
-                            "phone": arry[x].info.phone,
-                            "comments": arry[x].info.comments
-                        }
+                            firstName: arry[x].firstName,
+                            lastName: arry[x].lastName,
+                            email: arry[x].email,
+                            gender: arry[x].gender,
+                            isFavorite: arry[x].isFavorite,
+                            company: arry[x].info.company,
+                            avatar: arry[x].info.avatar,
+                            address: arry[x].info.address,
+                            phone: arry[x].info.phone,
+                            comments: arry[x].info.comments
+                        };
                         await api.contEdit(send, arry[x].id);
                     }
                 });
@@ -322,39 +312,36 @@ const bt = (chunks) => {
     });
 };
 
-const chunkArr = (arr) => {
-    var i, j, temparray, chunk = 10;
-    let chunks = [];
+const chunkArr = arr => {
+    let i, j, temparray;
+    const chunk = 10;
+    const chunks = [];
     for (i = 0, j = arr.length; i < j; i += chunk) {
         temparray = arr.slice(i, i + chunk);
         chunks.push(temparray);
     }
     return chunks;
-}
+};
 
 export const renderList = async () => {
     const section = document.getElementById("prin-section");
     if (window.state.loading) {
-
-        section.insertAdjacentHTML('beforeend', '<h1>LOADING</h1>')
+        section.insertAdjacentHTML("beforeend", "<h1>LOADING</h1>");
     }
 
     await api.cont();
-    let chunkF = chunkArr(window.state.favorites);
-            localStorage.setItem("favA", JSON.stringify(chunkF));
 
     if (window.state.loading) {
-        section.insertAdjacentHTML('beforeend', '<h1>LOADING</h1>')
+        section.insertAdjacentHTML("beforeend", "<h1>LOADING</h1>");
     } else {
         const section = document.getElementById("prin-section");
-        section.innerHTML = '';
-        let chunks = chunkArr(window.state.contacts);
+        section.innerHTML = "";
+        const chunks = chunkArr(window.state.contacts);
 
         document.getElementById("edit-list").style.display = "none";
         document.getElementById("search-box").style.display = "initial";
         document.getElementById("add-list").style.display = "initial";
         document.getElementById("rm-list").style.display = "initial";
-
 
         section.insertAdjacentHTML("beforeend", markupTable());
         section.insertAdjacentHTML("beforeend", markupBtn());
@@ -366,17 +353,18 @@ export const renderList = async () => {
             bt(chunks);
         });
 
-        document.getElementById("fav-list").addEventListener("click", async () => {
-            const section = document.getElementById("prin-section");
-            document.getElementById("search-box").style.display = "initial";
-            section.innerHTML = ``;
-            localStorage.setItem("bool", true);
-            await api.cont();
-            let chunksFav = chunkArr(window.state.favorites);
-            localStorage.setItem("favA", JSON.stringify(chunksFav));
-            renderPrin(chunksFav[0]);
-            bt(chunksFav);
-        });
+        document
+            .getElementById("fav-list")
+            .addEventListener("click", async () => {
+                const section = document.getElementById("prin-section");
+                document.getElementById("search-box").style.display = "initial";
+                section.innerHTML = ``;
+                localStorage.setItem("bool", true);
+                await api.cont();
+                const chunksFav = chunkArr(window.state.favorites);
+                renderPrin(chunksFav[0]);
+                bt(chunksFav);
+            });
 
         document.getElementById("add-list").addEventListener("click", () => {
             const section = document.getElementById("prin-section");
@@ -384,48 +372,42 @@ export const renderList = async () => {
             renderAdd();
         });
 
-        document.getElementById("rm-list").addEventListener("click", async () => {
-            let checkbox = [...document.getElementsByClassName("check")];
-            let userId = [0, ...document.getElementsByClassName("col0")];
-            for (let c = 1; c < checkbox.length; c++) {
-                if (checkbox[c].checked) {
-                    await api.contDel(userId[c].innerHTML);
+        document
+            .getElementById("rm-list")
+            .addEventListener("click", async () => {
+                const checkbox = [...document.getElementsByClassName("check")];
+                const userId = [0, ...document.getElementsByClassName("col0")];
+                for (let c = 1; c < checkbox.length; c++) {
+                    if (checkbox[c].checked) {
+                        await api.contDel(userId[c].innerHTML);
+                    }
                 }
-            }
-            await api.cont();
-            let chunksFav = chunkArr(window.state.favorites);
-            localStorage.setItem("favA", JSON.stringify(chunksFav));
-            const section = document.getElementById("prin-section");
-            section.innerHTML = ``;
-            let chunksAux = chunkArr(window.state.contacts);
-            if (localStorage.getItem("bool") === "true") {
-                let chunksFavAux = localStorage.getItem("favA");
-                let aux = JSON.parse(chunksFavAux);
-                renderPrin(aux[0]);
-                bt(aux);
-
-            } else {
-                renderPrin(chunksAux[0]);
-                bt(chunks);
-            }
-
-        });
+                await api.cont();
+                const chunksFav = chunkArr(window.state.favorites);
+                const section = document.getElementById("prin-section");
+                section.innerHTML = ``;
+                const chunksAux = chunkArr(window.state.contacts);
+                if (localStorage.getItem("bool") === "true") {
+                    const aux = chunksFav;
+                    renderPrin(aux[0]);
+                    bt(aux);
+                } else {
+                    renderPrin(chunksAux[0]);
+                    bt(chunks);
+                }
+            });
 
         //contacts insertion
         if (localStorage.getItem("bool") === "true") {
-            let chunksFav = localStorage.getItem("favA");
-            let aux = JSON.parse(chunksFav);
+            const chunksFav = chunkArr(window.state.favorites);
+            const aux = chunksFav;
             renderPrin(aux[0]);
             bt(aux);
-
         } else {
             renderPrin(chunks[0]);
             bt(chunks);
         }
 
         search();
-
     }
-
-
 };

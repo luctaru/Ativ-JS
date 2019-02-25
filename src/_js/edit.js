@@ -1,22 +1,21 @@
 import { Api } from "./api.js";
 import { validate } from "./add.js";
-import { renderList } from "./contact-list.js"
+import { renderList } from "./contact-list.js";
 
 const api = new Api();
 
-export const edit = async(bool, img) =>{
+export const edit = async (bool, img) => {
+    let genAux = "";
 
-    let genAux = '';
-
-    let filter = window.state.filter;
+    const filter = window.state.filter;
 
     const name = document.getElementById("iName").value;
     const surname = document.getElementById("iSurname").value;
     const radios = document.getElementsByName("nGenre");
-    if (radios[0].checked){
-        genAux = 'm'
-    } else{
-        genAux = 'f'
+    if (radios[0].checked) {
+        genAux = "m";
+    } else {
+        genAux = "f";
     }
     const email = document.getElementById("iEmail").value;
     const phone = document.getElementById("iPhone").value;
@@ -27,51 +26,50 @@ export const edit = async(bool, img) =>{
     const city = document.getElementById("iCity").value;
     const msg = document.getElementById("iMsg").value;
 
-    const address = num + ' ' + street + ', ' + state + ', ' + city;
+    const address = num + " " + street + ", " + state + ", " + city;
 
-    if(bool){
+    if (bool) {
         let send = {};
-        if(localStorage.getItem("bool") === "true"){
+        if (localStorage.getItem("bool") === "true") {
             send = {
-                "firstName": name,
-                "lastName": surname,
-                "email": email,
-                "gender": genAux,
-                "isFavorite": true,
-                "company": comp,
-                "avatar": img,
-                "address": address,
-                "phone": phone,
-                "comments": msg
-            }
-        } else{
+                firstName: name,
+                lastName: surname,
+                email: email,
+                gender: genAux,
+                isFavorite: true,
+                company: comp,
+                avatar: img,
+                address: address,
+                phone: phone,
+                comments: msg
+            };
+        } else {
             send = {
-                "firstName": name,
-                "lastName": surname,
-                "email": email,
-                "gender": genAux,
-                "isFavorite": false,
-                "company": comp,
-                "avatar": img,
-                "address": address,
-                "phone": phone,
-                "comments": msg
-            }
+                firstName: name,
+                lastName: surname,
+                email: email,
+                gender: genAux,
+                isFavorite: false,
+                company: comp,
+                avatar: img,
+                address: address,
+                phone: phone,
+                comments: msg
+            };
         }
-        
+
         await api.contEdit(send, filter.id);
         window.state = {
             ...window.state,
             filter: send
-        }
+        };
         const section = document.getElementById("prin-section");
         section.innerHTML = ``;
         renderList();
+    } else {
+        console.log("erro");
     }
-    else{
-        console.log("erro")
-    }
-}
+};
 
 export const renderEdit = async () => {
     document.getElementById("search-box").style.display = "none";
@@ -81,9 +79,9 @@ export const renderEdit = async () => {
 
     const section = document.getElementById("prin-section");
 
-    let filter = window.state.filter;
+    const filter = window.state.filter;
 
-    function markup() {
+    const markup = () => {
         const m = `<div id="form-add">
         <fieldset id="iPerson">
             <legend>Dados Pessoais</legend>
@@ -136,7 +134,9 @@ export const renderEdit = async () => {
         <fieldset id="iComment">
             <legend>Anotações</legend>
             <p><label for="iMsg">Comentário: </label><br />
-                <textarea name="nMsg" id="iMsg" cols="35" rows="5">${filter.info.comments}</textarea>
+                <textarea name="nMsg" id="iMsg" cols="35" rows="5">${
+                    filter.info.comments
+                }</textarea>
             </p>
         </fieldset>
 
@@ -145,44 +145,31 @@ export const renderEdit = async () => {
         </button>
     </div>`;
         return m;
-    }
+    };
 
     section.insertAdjacentHTML("beforeend", markup());
 
     const radios = document.getElementsByName("nGenre");
-    if (filter.gender == 'm'){
+    if (filter.gender == "m") {
         radios[0].setAttribute("checked", "yes");
-    } else{
+    } else {
         radios[1].setAttribute("checked", "yes");
     }
 
-    if(filter.info.address != null){
+    if (filter.info.address != null) {
         const auxNum = filter.info.address.split(" ", 1);
         const aux = filter.info.address.split(",");
         const aux2 = aux[0];
-        const aux3 = aux2.split(" ")
-        const auxStreet = aux3[1] + ' ' + aux3[2];
+        const aux3 = aux2.split(" ");
+        const auxStreet = aux3[1] + " " + aux3[2];
 
         document.getElementById("iNum").setAttribute("value", auxNum);
         document.getElementById("iStreet").setAttribute("value", auxStreet);
-        document.getElementById("iState").setAttribute("value", aux[1])
-        document.getElementById("iCity").setAttribute("value", aux[2])
+        document.getElementById("iState").setAttribute("value", aux[1]);
+        document.getElementById("iCity").setAttribute("value", aux[2]);
     }
 
     document.getElementById("send-btn").addEventListener("click", () => {
         edit(validate(), filter.info.avatar);
     });
-
-    // const name = document.getElementById("iName");
-    // const surname = document.getElementById("iSurname");
-    // const email = document.getElementById("iEmail");
-    // const phone = document.getElementById("iPhone");
-    // const comp = document.getElementById("iComp");
-    // const street = document.getElementById("iStreet");
-    // const num = document.getElementById("iNum");
-    // const state = document.getElementById("iState");
-    // const city = document.getElementById("iCity");
-
-
 };
-
